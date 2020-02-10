@@ -17,14 +17,20 @@ get_custom_objects().update({"weighted_bce": weighted_bce})
 
 # SET THIS: choose which correction model to use by uncommenting the appropriate
 # line below
-
-corr_model_type = 'classification'
-#corr_model_type = 'regression'
+#corr_model_type = 'classification'
+corr_model_type = 'regression'
 #corr_model_type = None
 
 # SET THESE: the folder and the name of the desired label model, as well as flattened_input
-folder = 'feed_forward_Tue_Oct__1_16-54-25_2019'
-model_name = 'ep_1_tp_0.966_fp_0.0_f_1_0.982_f_2_0.972_chain_2_thresh_0.5'
+# each model is species dependent
+species = 'bw' # 'bw'
+if species == 'bb':
+    model_name = 'feed_forward_ep_8_tp_0.953_fp_0.063_f_1_0.945_f_2_0.95_chain_4_thresh_0.9'
+elif species == 'bw':
+    model_name = 'ff_bw_tp_0.967_fp_0.015_chain_5_thresh_0.95'
+folder = 'best_models/' + species
+# the raw path for input files is species dependent
+raw_path = './unlabeled_inputs/' + species + '/' # 
 flattened_input = True #true for feed forward, false for resnet
 
 # load label model
@@ -40,14 +46,13 @@ def avgabs(y_true,y_pred): ##in seconds (if perturbation_max = 5*fs)
 
 
 if corr_model_type == 'classification':
-    correction_model = keras.models.load_model('../models/correction_models/correction_model_class.h5')
+    correction_model = keras.models.load_model('../models/correction_models/' + species + '/correction_model_class.h5')
 elif corr_model_type == 'regression':
-    correction_model = keras.models.load_model('../models/correction_models/correction_model_reg.h5', custom_objects={'avgabs': avgabs})
+    correction_model = keras.models.load_model('../models/correction_models/' + species + '/correction_model_reg.h5', custom_objects={'avgabs': avgabs})
 elif corr_model_type is None:
     correction_model = None
 
 # now generate the labels
-raw_path = './unlabeled_inputs/'
 for input_filename in os.listdir(raw_path):
     np_features = process_csv(raw_path, input_filename)
 
@@ -56,7 +61,7 @@ for input_filename in os.listdir(raw_path):
     labels = np.array(labels)
     labels = np.reshape(labels, (len(labels),1))
 
-    label_path = 'predicted_labels'
+    label_path = 'predicted_labels/' + species
     if not os.path.exists(label_path):
        os.makedirs(label_path)
     np.savetxt(label_path + '/labels_{}'.format(input_filename), labels, delimiter=',')
