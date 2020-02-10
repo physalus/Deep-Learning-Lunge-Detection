@@ -1,0 +1,12 @@
+Note: This assumes that you are using the feed foward model by species.
+Species abbreviation must me set in label.py (open with a text editor)
+
+Open a python virtual environment (version 3.6)
+Open the terminal
+Navigate to the main folder using dir command ('Deep-Learning-Lunge-Detection')
+RUN: pip install -r requirements.txt
+Make sure input files are in 'unlabeled_inputs' folder
+Make sure correct models are in the model folder (different by species)
+Navigate to the 'label_new_deployment' folder
+RUN: python label.py
+Files are exported to 'predicted_labels' folder
