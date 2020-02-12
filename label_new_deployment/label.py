@@ -17,13 +17,13 @@ get_custom_objects().update({"weighted_bce": weighted_bce})
 
 # SET THIS: choose which correction model to use by uncommenting the appropriate
 # line below
-#corr_model_type = 'classification'
-corr_model_type = 'regression'
+corr_model_type = 'classification'
+#corr_model_type = 'regression'
 #corr_model_type = None
 
 # SET THESE: the folder and the name of the desired label model, as well as flattened_input
 # each model is species dependent
-species = 'bw' # 'bw'
+species = 'bb' # 'bw'
 if species == 'bb':
     model_name = 'feed_forward_ep_8_tp_0.953_fp_0.063_f_1_0.945_f_2_0.95_chain_4_thresh_0.9'
 elif species == 'bw':
